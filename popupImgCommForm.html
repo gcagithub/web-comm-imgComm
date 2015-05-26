@@ -1,0 +1,85 @@
+	<div class="web-comm-popup-box web-comm" >
+	
+	    <!-- <div class="close">X</div> -->
+			
+	    <div class="top">
+
+		    <div class="thumbnail">
+	    		<button type="button" class="close btn-sm" aria-label="Close">
+	    			<span aria-hidden="true">&times;</span>
+	    		</button>
+				  <img class="center-block" src="#" />
+				  <div class="caption">
+		    		<p><small></small></p>
+				  </div>
+				</div>
+	    	
+	    </div>
+
+	    <div class="bottom">
+						<form>
+							<div class="form-group">
+								<label for="title">Title:</label>
+								<input type="text" name="title" class="form-control">
+							</div>
+							<div class="form-group">
+								<label for="comment">Comment:</label>
+								<textarea name="comment" class="form-control" rows="5" />
+							</div>
+							<div class="btn-group" role="group">
+									<button id="web-comm-ShowComments" type="button" class="btn btn-default btn-sm">Show comments</button>
+									<button type="submit" class="btn btn-default btn-sm pull-right">Submit</button>
+							</div>
+						</form>
+
+			<div id="web-comm-form-comments" class="ui comments">
+				<!-- <div class="comment">
+			    <a class="avatar">
+			      <img src="/images/avatar/small/matt.jpg">
+			    </a>
+			    <div class="content">
+			      <a class="author">Matt</a>
+			      <div class="metadata">
+			        <span class="date">Today at 5:42PM</span>
+			      </div>
+			      <div class="text">
+			        How artistic!
+			      </div>
+			      <div class="actions">
+			        <a class="reply">Reply</a>
+			      </div>
+			    </div>
+			  </div> -->
+			</div>
+	
+
+			</div>
+	
+	</div>
+
+<script id="commentImgTmpl" type="text/x-jsrender">
+	<div class="comment">
+		<div class="content">
+      <a class="author">{{:title}}</a>
+      <div class="metadata">
+        <span class="date">{{dateTime: createdOn}}</span>
+      </div>
+      <div class="text">
+        {{:comment}}
+      </div>
+      <div class="actions">
+        <a class="reply">Reply</a>
+      </div>
+    </div>
+	</div>
+</script>
+
+<script>
+	$.views.converters("dateTime", function(val) {
+		var date = new Date(val);
+
+  	return date.getDate() + " / " + (date.getMonth() + 1) + " / " + date.getFullYear()
+  					+ " " + date.getHours() + ":" + date.getMinutes();
+	});
+</script>
+

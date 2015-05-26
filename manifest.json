@@ -1,0 +1,25 @@
+{
+  "name": "Web-comm image selector.",
+  "description": "Selects image and sends comment to server",
+  "version": "0.1",
+  "permissions": [
+    "activeTab",
+    "http://localhost:8080/*"
+  ],
+  "background": { "persistent": false, "scripts": ["mainEventPage.js"] },
+  "browser_action": {
+      "name": "Click to select an image for comment."
+  },
+  "content_scripts": [
+    {
+      "matches": ["*://*/*"], 
+      "css": ["css/style.css", "css/comment.css", "css/bootstrap.css", "css/bootstrap-theme.css"],
+      "js": ["js/jquery-2.1.1.min.js", "js/jsrender.js", "js/imageselector.js", "js/sendImgComm.js", "js/showImgCommStatus.js"]
+    }
+  ],
+  "web_accessible_resources": [
+    "popupImgCommForm.html"
+  ],
+
+  "manifest_version": 2
+}

@@ -1,0 +1,81 @@
+.web-comm-popup-box {
+    position: absolute;
+    border-radius: 5px;
+    background: #fff;
+    display: none;
+    box-shadow: 1px 1px 5px rgba(0,0,0,0.2);
+    font-family: Arial, sans-serif;
+    z-index: 9999999;
+    font-size: 14px;
+}
+ 
+.web-comm-popup-box .close {
+    /*position: absolute;*/
+    top: 0px;
+    right: 0px;
+    font-family: Arial, Helvetica, sans-serif;  
+    font-weight: bold;
+    cursor: pointer;
+    color: #434343;
+    padding: 20px;
+    font-size: 20px;
+}
+ 
+.web-comm-popup-box .close:hover {
+    color: #000;
+}
+ 
+.web-comm-popup-box h2 {
+    padding: 0;
+    margin: 0;
+    font-size: 18px;
+}
+.web-comm-popup-box .top {
+    padding: 20px;
+}
+
+.web-comm-popup-box img {
+    max-width: 200px;
+}
+ 
+.web-comm-popup-box .bottom {
+    background: #eee;
+    border-top: 1px solid #e5e5e5;
+    padding: 20px;
+    border-bottom-left-radius: 5px;
+    border-bottom-right-radius: 5px;
+}
+
+.web-comm-popup-box textarea.form-control {
+    height: 100%;
+}
+ 
+#web-comm-img-popup {
+    background: rgba(0,0,0,0.3);
+    position: absolute;
+    top: 0;
+    overflow: scroll;
+    z-index: 999999;
+    left: 0;
+    display: none;
+}
+
+.wrap-web-comm-img {
+    /*display: block;*/
+    position: relative;
+}
+
+.web-comm-img-status {
+    display: inline-block;
+    position: absolute;
+    top:30px;
+    left: 0px;
+
+    color: #FFF;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 20px;
+
+    background-color: rgba(0,0,0,.4);
+    padding: 10px 30px;
+}
+
