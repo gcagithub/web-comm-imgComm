@@ -1,6 +1,6 @@
-﻿var serverURL = "http://localhost:8080/web-comm/";
-var tmplImgComm;
-var _jqImage;
+﻿// var _serverURL = "http://localhost:8080/web-comm/";
+// var _tmplImgComm;
+// var _jqImage;
 
 
 function sendWebComm (jqForm, jqImage) {
@@ -12,12 +12,16 @@ function sendWebComm (jqForm, jqImage) {
 		createdOn: new Date().toJSON()
 	};
 
-	$.post(serverURL + "postImgComm", data, handleWebCommResponseSuccess).fail(handleWebCommResponseFail);
+	disableFormEventAndButtons(true);
+
+	$.post(_serverURL + "postImgComm", data, handleWebCommResponseSuccess)
+		.fail(handleWebCommResponseFail)
+		.always(function() {disableFormEventAndButtons(false);});
 }
 
 function handleWebCommResponseSuccess (data, status, jqXHR) {
+	logger('Comment post success!');
 	logger(status);
-	logger(jqXHR.responseText);
 	updateImgComments(_jqImage);
 }
 
@@ -32,30 +36,30 @@ function logger (obj) {
 }
 
 function renderImgComments (data) {
-	logger(JSON.parse(data));
-	tmplImgComm = tmplImgComm ? tmplImgComm : $.templates("#commentImgTmpl");
-	$("#web-comm-form-comments").html(tmplImgComm.render(JSON.parse(data)));
+	_tmplImgComm = _tmplImgComm ? _tmplImgComm : $.templates("#commentImgTmpl");
+	$("#web-comm-form-comments").html(_tmplImgComm.render(JSON.parse(data)));
 
 	// renderImgComments(jqXHR.responseText);
 }
 
 function updateImgComments (jqImage) {
 	var src = jqImage.attr('src');
-	var data = {hashId: encodeURI(src)};
-	$.get(serverURL + "getImgComm",
-		data,
+	$.get(_serverURL + "getImgComm",
+		{hashId: encodeURI(src)},
 		handleGetAllImgCommResponseSuccess).fail(handleWebCommResponseFail);
 }
 
 function handleGetAllImgCommResponseSuccess (data, status, jqXHR) {
+	_imgCommCache = jqXHR.responseText;
 	renderImgComments (jqXHR.responseText);
+	showWebCommImgStatus ();
 }
 
-// function initViewConverters () {
-// 	$.views.converters("dateTime", function(val) {
-// 		var date = new Date(val);
-
-//   	return date.getDate() + " / " + (date.getMonth() + 1) + " / " + date.getFullYear()
-//   					+ " " + date.getHours() + ":" + date.getMinutes();
-// 	});
-// }
+function disableFormEventAndButtons (isDisable) {
+	if(isDisable) {
+		_jqWebCommImgPopup.find('form').off('submit', submitFormEvent);
+	} else {
+		_jqWebCommImgPopup.find('form').on('submit', submitFormEvent);
+	}
+	_jqWebCommImgPopup.find('form button').prop( "disabled", isDisable );
+}

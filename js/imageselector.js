@@ -1,7 +1,7 @@
-var _popupWidth = 400;
-var _jqImage;
-var _popupImgHTML = "popupImgCommForm.html";
-var _jqWebCommImgPopup;
+// var _popupWidth = 400;
+// var _jqImage;
+// var _popupImgHTML = "popupImgCommForm.html";
+// var _jqWebCommImgPopup;
 
 chrome.runtime.onMessage.addListener(
   function(request, sender, sendResponse) {
@@ -14,6 +14,8 @@ chrome.runtime.onMessage.addListener(
 
 			request.selectImg ? sendResponse({farewell: "image selection enable"})
 				: sendResponse({farewell: "image selection disable"});
+
+			initPopupWebCommLayer();
 
     	toggleImgSelect(request.selectImg);
     	// showImgCommStatus.js
@@ -45,21 +47,23 @@ function toggleImgSelect (isEnable) {
 		e.stopPropagation();
 
 		_jqImage = $(this);
-		initPopupWebCommForm();
+		loadPopupWebCommForm();
 	});
     	
 }
 
-function initPopupWebCommForm () {
+function initPopupWebCommLayer () {
 	if(!_jqWebCommImgPopup){
 		$("body").prepend("<div id='web-comm-img-popup'></div>");
 		_jqWebCommImgPopup = $("#web-comm-img-popup");
 	}
+}
 
+function loadPopupWebCommForm () {
 	srcURL = chrome.extension.getURL(_popupImgHTML);
-	_jqWebCommImgPopup.load(srcURL, showPopup);
-	// console.log(srcURL);
-
+	_jqWebCommImgPopup.load(srcURL, showPopup, function() {
+		console.log('Form was loaded successfull!');
+	});
 }
 
 function showPopup () {
@@ -89,9 +93,10 @@ function showPopup () {
 		disablePopupImgClick ();
 		closePopupImgBehaviour ();
 		showImgInPopup();
+
 		initFormSubmitEvent();
 		initShowCommentsEvent();
-
+		
     return false; 	
 }
 
@@ -118,20 +123,26 @@ function closePopupImgBehaviour () {
 	});
 }
 
+
+// sendImgComm.js for below
+
 function initFormSubmitEvent () {
-    _jqWebCommImgPopup.find("form").submit(function (e) {
-        e.preventDefault();
-        if ($(this).find('textarea').val() == 0) {
-        		alert("Empty comment");
-        } else {
-        	// sendImgComm.js
-        	sendWebComm($(this), _jqImage);
-        }
-    });
+	_jqWebCommImgPopup.find("form").off();
+  _jqWebCommImgPopup.find("form").submit(submitFormEvent);
 }
 
 function initShowCommentsEvent () {
 	$("button#web-comm-ShowComments").click(function() {
 		updateImgComments (_jqImage);
 	});
+}
+
+function submitFormEvent (e) {
+	e.preventDefault();
+
+  if ($(this).find('textarea').val() == 0) {
+  		alert("Empty comment");
+  } else {
+  	sendWebComm($(this), _jqImage);
+  }
 }

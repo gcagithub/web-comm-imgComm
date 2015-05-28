@@ -22,6 +22,7 @@
 .ui.comments {
   margin: 1.5em 0em;
   max-width: 650px;
+  /*max-height: 480px*/
 }
 .ui.comments:first-child {
   margin-top: 0em;
@@ -140,7 +141,7 @@
 
 .ui.comments .comment .text {
   margin: 0.25em 0em 0.5em;
-  font-size: 1em;
+  font-size: 0.9em;
   word-wrap: break-word;
   color: rgba(0, 0, 0, 0.8);
   line-height: 1.3;

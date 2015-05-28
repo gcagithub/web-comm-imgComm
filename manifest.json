@@ -14,7 +14,12 @@
     {
       "matches": ["*://*/*"], 
       "css": ["css/style.css", "css/comment.css", "css/bootstrap.css", "css/bootstrap-theme.css"],
-      "js": ["js/jquery-2.1.1.min.js", "js/jsrender.js", "js/imageselector.js", "js/sendImgComm.js", "js/showImgCommStatus.js"]
+      "js": ["js/jquery-2.1.1.min.js",
+            "js/jsrender.js",
+            "js/variables.js",
+            "js/imageselector.js",
+            "js/sendImgComm.js",
+            "js/showImgCommStatus.js"]
     }
   ],
   "web_accessible_resources": [
