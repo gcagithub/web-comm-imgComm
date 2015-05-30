@@ -2,33 +2,61 @@
 
 function toggleImgViewStatus (isEnable) {
 	if (isEnable) {
-		showWebCommImgStatus();
+		serveWebCommImgStatus();
 	} else {
 		hideImgCommStatus();
 	}
 }
 
-function showWebCommImgStatusOnSuccess () {
+function persistWebCommImgStatusOnSuccess () {
 	hideImgCommStatus ();
-
+	
+	// delete _imgCommTooltips['webCommTooltips'];
+	_imgCommTooltips['webCommTooltips'] = [];
+	var status = _imgCommTooltips['webCommStatus'];
 	var store, text;
 	$('img').each(function() {
-		store = _jqWebCommImgPopup.data($(this).attr('src'));
+		store = status[$(this).attr('src')];
 		if(store){
 			text = (store.length + 1) + " comments" ;
-			$(this).wrap("<div class='wrap-web-comm-img'></div>");
-			$(this).after("<span class='web-comm-img-status'>" + text + "</span>")
+			// $(this).wrap("<div class='wrap-web-comm-img'></div>");
+			// $(this).after("<span class='web-comm-img-status'>" + text + "</span>")
+
+			var tips = $(this).tooltipster({
+				content: text,
+				autoClose: false,
+				multiple: true,
+				trigger: 'custom',
+				position: 'top-left'
+			});
+
+			// tips[0].show();
+			
+			_imgCommTooltips['webCommTooltips'].push(tips[0]);
 		}
 	});
+
 }
 
 function hideImgCommStatus () {
-	$('div.wrap-web-comm-img img').each(function() {
-			$(this).unwrap().next().remove();
-	});
+	var tips = _imgCommTooltips['webCommTooltips'];
+	for(i in tips) {
+		tips[i].hide();
+	}
+
+	// $('div.wrap-web-comm-img img').each(function() {
+	// 		$(this).unwrap().next().remove();
+	// });
 }
 
-function showWebCommImgStatus () {
+function showImgCommStatus () {
+	var tips = _imgCommTooltips['webCommTooltips'];
+	for(i in tips) {
+		tips[i].show();
+	}
+}
+
+function serveWebCommImgStatus () {
 	if(!_imgSrcs){
 		_imgSrcs = [];
 		$('img').each(function() {
@@ -43,19 +71,21 @@ function onSuccessImageStatus (data, status, jqXHR) {
 	console.log('Status has been updated successfull!');
 	var results = JSON.parse(jqXHR.responseText);
 	updateImgCommStatus (results);
-	showWebCommImgStatusOnSuccess();
+	persistWebCommImgStatusOnSuccess();
+	showImgCommStatus();
 }
 
 function onFailImageStatus (data, status, jqXHR) {
-	console.log("Fail occure while updating status!");
+	console.log("Fail occured while updating status!");
 	console.log(status);
 }
 
 function updateImgCommStatus (data) {
-	_jqWebCommImgPopup.removeData();
+	delete _imgCommTooltips['webCommStatus'];
+	_imgCommTooltips['webCommStatus'] = {};
+	var status = _imgCommTooltips['webCommStatus'];
 	$.map(data, function(obj, i) {
-		_jqWebCommImgPopup.data(obj.imgSrc)
-			? _jqWebCommImgPopup.data(obj.imgSrc).push(obj)
-				: _jqWebCommImgPopup.data(obj.imgSrc, []);
+		status[obj.imgSrc] ? status[obj.imgSrc].push(obj) : status[obj.imgSrc] = [];
 	});
+
 }

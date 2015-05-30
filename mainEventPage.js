@@ -3,24 +3,33 @@
 // chrome.tabs.executeScript({file: 'js/imageselector.js'});
 
 var _tabIdsPersistence = [];
+var _tabId;
 
 chrome.browserAction.onClicked.addListener(function(tab) {
+	_tabId = tab.id;
 	saveOrRemoveTabId (tab.id);
 	triggerExtension (tab.id);
 });
 
 chrome.tabs.onActivated.addListener(function(activeInfo) {
+	_tabId = activeInfo.tabId;
 	triggerExtension (activeInfo.tabId);
 });
 
 chrome.tabs.onUpdated.addListener(function(tabId){
+	_tabId = tabId;
 	triggerExtension (tabId);
 });
 
 chrome.tabs.onRemoved.addListener(function(tabId){
 	if(isExtensionActive (tabId)){
-		saveOrRemoveTabId (tab.id);
+		saveOrRemoveTabId (tabId);
 	}
+});
+
+chrome.runtime.onSuspend.addListener(function (){
+	saveOrRemoveTabId (_tabId);
+	// triggerExtension (_tabId);
 });
 
 function triggerExtension (tabId) {

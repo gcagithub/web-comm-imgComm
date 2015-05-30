@@ -5,4 +5,5 @@ var _jqWebCommImgPopup;
 var _imgSrcs;
 var _tmplImgComm;
 var _jqImage;
-var _imgCommCache;
+var _imgCommTooltips = {};
+var _toolTipsterOpenForm;

@@ -52,7 +52,6 @@ function updateImgComments (jqImage) {
 function handleGetAllImgCommResponseSuccess (data, status, jqXHR) {
 	_imgCommCache = jqXHR.responseText;
 	renderImgComments (jqXHR.responseText);
-	showWebCommImgStatus ();
 }
 
 function disableFormEventAndButtons (isDisable) {

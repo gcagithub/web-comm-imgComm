@@ -13,11 +13,19 @@
   "content_scripts": [
     {
       "matches": ["*://*/*"], 
-      "css": ["css/style.css", "css/comment.css", "css/bootstrap.css", "css/bootstrap-theme.css"],
+
+      "css": ["css/style.css",
+              "css/comment.css",
+              "css/bootstrap.css",
+              "css/bootstrap-theme.css",
+              "css/tooltipster.css",
+              "css/tooltipster-noir.css"],
+
       "js": ["js/jquery-2.1.1.min.js",
             "js/jsrender.js",
+            "js/jquery.tooltipster.min.js",
             "js/variables.js",
-            "js/imageselector.js",
+            "js/webCommImgPopup.js",
             "js/sendImgComm.js",
             "js/showImgCommStatus.js"]
     }
