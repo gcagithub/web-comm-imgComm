@@ -26,8 +26,10 @@ function persistWebCommImgStatusOnSuccess () {
 				content: text,
 				autoClose: false,
 				multiple: true,
+				interactive: true,
 				trigger: 'custom',
-				position: 'top-left'
+				position: 'top-left',
+				functionReady: onTooltipeReadyShowComm
 			});
 
 			// tips[0].show();
@@ -36,6 +38,10 @@ function persistWebCommImgStatusOnSuccess () {
 		}
 	});
 
+}
+
+function onTooltipeReadyShowComm (origin, tooltip) {
+	onTooltipeReady (origin, tooltip);
 }
 
 function hideImgCommStatus () {

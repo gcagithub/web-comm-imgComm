@@ -22,6 +22,8 @@ function sendWebComm (jqForm, jqImage) {
 function handleWebCommResponseSuccess (data, status, jqXHR) {
 	logger('Comment post success!');
 	logger(status);
+
+	emptyFormFields ();
 	updateImgComments(_jqImage);
 }
 
@@ -61,4 +63,8 @@ function disableFormEventAndButtons (isDisable) {
 		_jqWebCommImgPopup.find('form').on('submit', submitFormEvent);
 	}
 	_jqWebCommImgPopup.find('form button').prop( "disabled", isDisable );
+}
+
+function emptyFormFields () {
+	_jqWebCommImgPopup.find('form input, form textarea').val('');
 }

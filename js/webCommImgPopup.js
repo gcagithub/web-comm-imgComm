@@ -24,8 +24,9 @@ chrome.runtime.onMessage.addListener(
 });
 
 function toggleImgCommTooltips (isEnable) {
-	if(!$('img').hasClass('tooltipstered')) {
-		_toolTipsterOpenForm = $('img').tooltipster({
+	if (isEnable) {
+		if(!$('img').hasClass('tooltipstered')) {
+			_toolTipsterOpenForm = $('img').tooltipster({
 					content: $("<span><a href='create_comment'>Create comment</a></span>"),
 					position: 'bottom-left',
 					interactive : true,
@@ -33,9 +34,8 @@ function toggleImgCommTooltips (isEnable) {
 					theme: "tooltipster-noir",
 					functionReady: onTooltipeReady,
 					functionAfter: onTooltipeAfter
-		});
-		tooltipsDisable ();
-	} else if (isEnable) {
+			});
+	}
 		tooltipsEnable ();
 	} else {
 		tooltipsDisable ();
@@ -44,9 +44,10 @@ function toggleImgCommTooltips (isEnable) {
 }
 
 function tooltipsEnable () {
- 	if(!_toolTipsterOpenForm[0].enabled){
- 		$('img').tooltipster('enable');
+ 	for(i in _toolTipsterOpenForm){
+ 		_toolTipsterOpenForm[i].enable();
  	}
+
 	var tips = _imgCommTooltips['webCommTooltips'];
 	for(i in tips) {
 		tips[i].enabled = true;
@@ -54,9 +55,10 @@ function tooltipsEnable () {
 }
 
 function tooltipsDisable () {
-	if(_toolTipsterOpenForm[0].enabled){
- 		$('img').tooltipster('disable');
+ for(i in _toolTipsterOpenForm){
+ 		_toolTipsterOpenForm[i].disable();
  	}
+
 	var tips = _imgCommTooltips['webCommTooltips'];
 	for(i in tips) {
 		tips[i].enabled = false;
@@ -154,11 +156,13 @@ function showPopup () {
 		// $('html').scrollTop(scrollPos);
 
 		disablePopupImgClick ();
-		closePopupImgBehaviour ();
+		initClosePopupImgBehaviour ();
 		showImgInPopup();
 
 		initFormSubmitEvent();
 		initShowCommentsEvent();
+
+		updateImgComments (_jqImage);
 		
 }
 
@@ -176,7 +180,7 @@ function disablePopupImgClick () {
 	});
 }
 
-function closePopupImgBehaviour () {
+function initClosePopupImgBehaviour () {
 	$('#web-comm-img-popup, #web-comm-img-popup .close').click(function() { 
 		var scrollPos = $(window).scrollTop();
 		/* Hide the popup and blackout when clicking outside the popup */

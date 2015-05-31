@@ -28,7 +28,7 @@ chrome.tabs.onRemoved.addListener(function(tabId){
 });
 
 chrome.runtime.onSuspend.addListener(function (){
-	saveOrRemoveTabId (_tabId);
+	// saveOrRemoveTabId (_tabId);
 	// triggerExtension (_tabId);
 });
 
