@@ -20,14 +20,14 @@ chrome.runtime.onMessage.addListener(
     	// showImgCommStatus.js
     	toggleImgViewStatus(request.selectImg);
 
-    	console.log(request.selectImg);
 });
 
 function toggleImgCommTooltips (isEnable) {
 	if (isEnable) {
 		if(!$('img').hasClass('tooltipstered')) {
+			var title = getLocalString('tooltip_create_comment');
 			_toolTipsterOpenForm = $('img').tooltipster({
-					content: $("<span><a href='create_comment'>Create comment</a></span>"),
+					content: $("<span><a href='create_comment'></a></span>").children().text(title),
 					position: 'bottom-left',
 					interactive : true,
 					multiple: true,
@@ -56,6 +56,7 @@ function tooltipsEnable () {
 
 function tooltipsDisable () {
  for(i in _toolTipsterOpenForm){
+ 	_toolTipsterOpenForm[i].hide();
  		_toolTipsterOpenForm[i].disable();
  	}
 
@@ -130,10 +131,8 @@ function loadPopupWebCommForm () {
 }
 
 function showPopup () {
-	console.log('Show popup');
 		// $(window).resize(showPopup);
 		// $(window).scroll(showPopup);
-		_jqWebCommImgPopup.show();
 
     var winWidth = $(window).width();
     var winHeight = $(document).height();
@@ -148,6 +147,8 @@ function showPopup () {
     _jqWebCommImgPopup.css({'width' : winWidth+'px', 'height' : winHeight+'px'});
      
 		/* Show the correct popup box, show the blackout and disable scrolling */
+		localizeImgPopup();
+
 		_jqWebCommImgPopup.children().show();
 		_jqWebCommImgPopup.show();
 		// $('html,body').css('overflow', 'hidden');
@@ -220,4 +221,31 @@ function submitFormEvent (e) {
   } else {
   	sendWebComm($(this), _jqImage);
   }
+}
+
+function defineLocal () {
+	var lng = $('html').attr('lang')
+		|| navigator.browserLanguage
+		|| navigator.language
+		|| navigator.userLanguage;
+
+	_lang = lng.substring(0,2);
+	console.log('lang: ' + _lang);
+}
+
+function getLocalString (key) {
+	if(!_lang) defineLocal ();
+
+	var tmpl = _localTmpls[_lang] || _localTmpls['en'];
+	return key ? tmpl[key] : tmpl;
+}
+
+function localizeImgPopup () {
+	var content = _jqWebCommImgPopup.find('.web-comm-popup-box:first').html();
+
+	for(i in getLocalString()) {
+		content = content.replace(i, getLocalString(i));
+	}
+	_jqWebCommImgPopup.find('.web-comm-popup-box:first').html(content);
+	
 }

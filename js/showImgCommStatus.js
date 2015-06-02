@@ -18,17 +18,18 @@ function persistWebCommImgStatusOnSuccess () {
 	$('img').each(function() {
 		store = status[$(this).attr('src')];
 		if(store){
-			text = (store.length + 1) + " comments" ;
+			text = (store.length + 1) + getLocalString('tooltip_comments') ;
 			// $(this).wrap("<div class='wrap-web-comm-img'></div>");
 			// $(this).after("<span class='web-comm-img-status'>" + text + "</span>")
 
 			var tips = $(this).tooltipster({
-				content: text,
+				content: $("<span><a href='show_comments'></a></span>").children().text(text),
+				// content: text,
 				autoClose: false,
 				multiple: true,
 				interactive: true,
 				trigger: 'custom',
-				position: 'top-left',
+				position: 'bottom-left',
 				functionReady: onTooltipeReadyShowComm
 			});
 

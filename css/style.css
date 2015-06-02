@@ -66,6 +66,16 @@
     max-height: 480px;
 }
 
+#web-comm-left-comments {
+    padding-right: 0px;
+    margin-right: 0px;
+}
+
+#web-comm-right-comments {
+    padding-left: 0px;
+    margin-left: 0px;
+}
+
 .wrap-web-comm-img {
     /*display: block;*/
     position: relative;
