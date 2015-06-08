@@ -1,6 +1,7 @@
 var _popupWidth = 600;
 var _popupImgHTML = "popupImgCommForm.html";
-var _serverURL = "http://localhost:8080/web-comm/";
+// var _serverURL = "http://localhost:8080/web-comm/";
+var _serverURL = "http://localhost:8080/web-com/rest/imgcomment/";
 var _jqWebCommImgPopup;
 var _imgSrcs;
 var _tmplImgComm;
