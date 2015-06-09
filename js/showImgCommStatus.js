@@ -19,8 +19,8 @@ function persistWebCommImgStatusOnSuccess () {
 		store = status[$(this).attr('src')];
 		if(store){
 			text = (store.length + 1) + getLocalString('tooltip_comments') ;
-			// $(this).wrap("<div class='wrap-web-comm-img'></div>");
-			// $(this).after("<span class='web-comm-img-status'>" + text + "</span>")
+			$(this).wrap("<div class='wrap-web-comm-img'></div>");
+			$(this).after("<span class='web-comm-img-status'>" + text + "</span>")
 
 			var tips = $(this).tooltipster({
 				content: $("<span><a href='show_comments'></a></span>").children().text(text),
