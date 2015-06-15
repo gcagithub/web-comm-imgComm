@@ -28,7 +28,12 @@
             "js/variables.js",
             "js/webCommImgPopup.js",
             "js/sendImgComm.js",
-            "js/showImgCommStatus.js"]
+            "js/showImgCommStatus.js",
+            "js/zlib.js",
+            "js/blockhash.js",
+            "js/hash-module.js"
+
+            ]
     }
   ],
   "web_accessible_resources": [

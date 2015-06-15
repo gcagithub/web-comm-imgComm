@@ -15,12 +15,19 @@ chrome.runtime.onMessage.addListener(
 			request.selectImg ? sendResponse({farewell: "image selection enable"})
 				: sendResponse({farewell: "image selection disable"});
 
-			toggleImgCommTooltips(request.selectImg);
-    	// toggleImgSelect(request.selectImg);
-    	// showImgCommStatus.js
-    	toggleImgViewStatus(request.selectImg);
+			if (request.selectImg && !_imgHashIdList) {
+				initOnStartProcess (); //hash-module.js
+			} else {
+				toggleMainFuns(request.selectImg);
+			}
+
 
 });
+
+function toggleMainFuns (isEnable) {
+	toggleImgCommTooltips(isEnable);
+	toggleImgViewStatus(isEnable); // showImgCommStatus.js
+}
 
 function toggleImgCommTooltips (isEnable) {
 	if (isEnable) {
@@ -230,7 +237,7 @@ function defineLocal () {
 		|| navigator.userLanguage;
 
 	_lang = lng.substring(0,2);
-	console.log('lang: ' + _lang);
+	// console.log('lang: ' + _lang);
 }
 
 function getLocalString (key) {

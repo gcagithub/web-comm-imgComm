@@ -9,7 +9,8 @@ function sendWebComm (jqForm, jqImage) {
 		imgSrc: jqImage.attr('src'),
 		comment: jqForm.find('textarea').val(),
 		title: jqForm.find("input[name='title']").val(),
-		createdOn: new Date().toJSON()
+		createdOn: new Date().toJSON(),
+		hashId: jqImage.attr(_wcHashIdAttr)
 	};
 
 	disableFormEventAndButtons(true);
@@ -38,22 +39,26 @@ function logger (obj) {
 }
 
 function renderImgComments (data) {
+	var results = [];
+	for(var i in data.result) {
+		results.push(JSON.parse(data.result[i]));
+	}
 	_tmplImgComm = _tmplImgComm ? _tmplImgComm : $.templates("#commentImgTmpl");
-	$("#web-comm-form-comments").html(_tmplImgComm.render(JSON.parse(data)));
+	$("#web-comm-form-comments").html(_tmplImgComm.render(results));
 
 	// renderImgComments(jqXHR.responseText);
 }
 
 function updateImgComments (jqImage) {
-	var src = jqImage.attr('src');
 	$.get(_serverURL + "getImgComm",
-		{hashId: encodeURI(src)},
+		{hashId: jqImage.attr(_wcHashIdAttr)},
 		handleGetAllImgCommResponseSuccess).fail(handleWebCommResponseFail);
 }
 
 function handleGetAllImgCommResponseSuccess (data, status, jqXHR) {
-	_imgCommCache = jqXHR.responseText;
-	renderImgComments (jqXHR.responseText);
+	var response = JSON.parse(jqXHR.responseText)
+	_imgCommCache = response;
+	renderImgComments (response);
 }
 
 function disableFormEventAndButtons (isDisable) {

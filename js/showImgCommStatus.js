@@ -51,9 +51,9 @@ function hideImgCommStatus () {
 		tips[i].hide();
 	}
 
-	// $('div.wrap-web-comm-img img').each(function() {
-	// 		$(this).unwrap().next().remove();
-	// });
+	$('div.wrap-web-comm-img img').each(function() {
+			$(this).unwrap().next().remove();
+	});
 }
 
 function showImgCommStatus () {
@@ -64,20 +64,14 @@ function showImgCommStatus () {
 }
 
 function serveWebCommImgStatus () {
-	if(!_imgSrcs){
-		_imgSrcs = [];
-		$('img').each(function() {
-			_imgSrcs.push($(this).attr('src'));
-		});
-	}
-
-	$.get(_serverURL + 'getAllImgStatus', {imgSrcs: _imgSrcs} , onSuccessImageStatus).fail(onFailImageStatus);
+	// console.log(_imgHashIdList);
+	$.get(_serverURL + 'getAllImgStatus', {data: {imgHashIdList: _imgHashIdList}} , onSuccessImageStatus).fail(onFailImageStatus);
 }
 
 function onSuccessImageStatus (data, status, jqXHR) {
 	console.log('Status has been updated successfull!');
 	var results = JSON.parse(jqXHR.responseText);
-	updateImgCommStatus (results);
+	updateImgCommStatus (results.result);
 	persistWebCommImgStatusOnSuccess();
 	showImgCommStatus();
 }
@@ -89,10 +83,9 @@ function onFailImageStatus (data, status, jqXHR) {
 
 function updateImgCommStatus (data) {
 	delete _imgCommTooltips['webCommStatus'];
-	_imgCommTooltips['webCommStatus'] = {};
-	var status = _imgCommTooltips['webCommStatus'];
+	var status = _imgCommTooltips['webCommStatus'] = {};
 	$.map(data, function(obj, i) {
+		obj = JSON.parse(obj);
 		status[obj.imgSrc] ? status[obj.imgSrc].push(obj) : status[obj.imgSrc] = [];
 	});
-
 }
