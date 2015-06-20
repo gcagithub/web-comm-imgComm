@@ -28,6 +28,7 @@ chrome.tabs.onRemoved.addListener(function(tabId){
 });
 
 chrome.runtime.onSuspend.addListener(function (){
+	// sendLogMessage(_tabId, '_tabIdsPersistence.indexOf(_tabId) = ' + _tabIdsPersistence.indexOf(_tabId));
 	// saveOrRemoveTabId (_tabId);
 	// triggerExtension (_tabId);
 });
@@ -46,6 +47,14 @@ function triggerExtension (tabId) {
 
 }
 
+function sendLogMessage (tabId, message) {
+	if (!tabId) return;
+
+	chrome.tabs.sendMessage(tabId, {message: message}, function(response) {
+	    console.log(response.farewell);
+	});
+}
+
 function sendMessageToContentScripts (tabId, isEnable) {
 	if (!tabId) return;
 
@@ -55,10 +64,7 @@ function sendMessageToContentScripts (tabId, isEnable) {
 }
 
 function isExtensionActive (tabId) {
-	for (i in _tabIdsPersistence) {
-		if (_tabIdsPersistence[i] === tabId) return true;
-	};
-	return false;
+	return _tabIdsPersistence.indexOf(tabId) == -1 ? false : true;
 }
 
 function saveOrRemoveTabId (tabId) {

@@ -16,7 +16,7 @@ var _tmplImgComm;
 
 // currently commented image
 var _jqImage;
-var _imgCommTooltips = {};
+var _imgCommData = {};
 var _toolTipsterOpenForm;
 
 // brauser language
@@ -36,7 +36,7 @@ var _localTmpls = {
 	},
 	ru: {
 		tooltip_create_comment: 'Создать комментарий',
-		tooltip_comments: ' комментарий(-ев)', 
+		tooltip_comments: ' ',
 		form_btn_submit: 'Отправить',
 		form_btn_show_comments: 'Показать комм-ии',
 		form_title: 'Имя:',

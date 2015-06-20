@@ -1,0 +1,35 @@
+/*
+    MYSQL Function
+*/
+DELIMITER $$
+DROP FUNCTION IF EXISTS comparehash $$
+CREATE FUNCTION comparehash (hash1 varchar(256), hash2 varchar(256), maxlen int)
+RETURNS float
+DETERMINISTIC
+BEGIN
+
+     DECLARE hashpart1 varchar(64) DEFAULT "";
+     DECLARE hashpart2 varchar(64) DEFAULT "";
+     DECLARE bitcnt    int         DEFAULT 0;
+     DECLARE strlen    int         DEFAULT 16;
+
+     DECLARE i   int DEFAULT 0;
+     DECLARE len int DEFAULT 0;
+	 
+     SET len = LENGTH(hash1) / strlen;
+	 
+     WHILE i<len AND i < maxlen DO
+     
+         SET hashpart1 = SUBSTRING(hash1,(i*strlen)+1,strlen);
+         SET hashpart2 = SUBSTRING(hash2,(i*strlen)+1,strlen);
+
+         SET bitcnt = bitcnt + bit_count(cast(conv(hashpart1, 16, 10) as unsigned) ^ cast(conv(hashpart2, 16, 10) as unsigned));
+         
+         SET i = i+1;
+
+     END WHILE;	 
+	 
+     RETURN ((64*i)-bitcnt)*100.0/(64*i);
+
+END $$
+DELIMITER ;

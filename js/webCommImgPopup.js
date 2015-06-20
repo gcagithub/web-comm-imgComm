@@ -2,6 +2,9 @@
 // var _jqImage;
 // var _popupImgHTML = "popupImgCommForm.html";
 // var _jqWebCommImgPopup;
+var delta;
+var imgCount;
+var count = 0;
 
 chrome.runtime.onMessage.addListener(
   function(request, sender, sendResponse) {
@@ -15,25 +18,26 @@ chrome.runtime.onMessage.addListener(
 			request.selectImg ? sendResponse({farewell: "image selection enable"})
 				: sendResponse({farewell: "image selection disable"});
 
-			if (request.selectImg && !_imgHashIdList) {
-				initOnStartProcess (); //hash-module.js
+				console.log('Runtime message: ' + request.message);
+			if (request.selectImg) {
+				activateImgHashProcess (); //hash-module.js
 			} else {
-				toggleMainFuns(request.selectImg);
+				applicationActivity(request.selectImg);
 			}
 
 
 });
 
-function toggleMainFuns (isEnable) {
+function applicationActivity (isEnable) {
 	toggleImgCommTooltips(isEnable);
 	toggleImgViewStatus(isEnable); // showImgCommStatus.js
 }
 
 function toggleImgCommTooltips (isEnable) {
 	if (isEnable) {
-		if(!$('img').hasClass('tooltipstered')) {
+		if(!$('img[' + _wcHashIdAttr + ']').hasClass('tooltipstered')) {
 			var title = getLocalString('tooltip_create_comment');
-			_toolTipsterOpenForm = $('img').tooltipster({
+			_toolTipsterOpenForm = $('img[' + _wcHashIdAttr + ']').tooltipster({
 					content: $("<span><a href='create_comment'></a></span>").children().text(title),
 					position: 'bottom-left',
 					interactive : true,
@@ -42,7 +46,7 @@ function toggleImgCommTooltips (isEnable) {
 					functionReady: onTooltipeReady,
 					functionAfter: onTooltipeAfter
 			});
-	}
+		}
 		tooltipsEnable ();
 	} else {
 		tooltipsDisable ();
@@ -55,7 +59,7 @@ function tooltipsEnable () {
  		_toolTipsterOpenForm[i].enable();
  	}
 
-	var tips = _imgCommTooltips['webCommTooltips'];
+	var tips = _imgCommData['webCommTooltips'];
 	for(i in tips) {
 		tips[i].enabled = true;
 	}
@@ -67,7 +71,7 @@ function tooltipsDisable () {
  		_toolTipsterOpenForm[i].disable();
  	}
 
-	var tips = _imgCommTooltips['webCommTooltips'];
+	var tips = _imgCommData['webCommTooltips'];
 	for(i in tips) {
 		tips[i].enabled = false;
 	}
@@ -78,11 +82,15 @@ function onTooltipeAfter (origin) {
 }
 
 function onTooltipeReady (origin, tooltip) {
-	tooltip.click(function(e) {
+	clickShowPopupWebCommForm (origin, tooltip);
+}
+
+function clickShowPopupWebCommForm (jqObj, jqTarget) {
+	jqTarget.click(function(e) {
 		e.preventDefault();
 		e.stopPropagation();
 		
-		_jqImage = origin;
+		_jqImage = jqObj;
 
 		hideImgCommStatus ();
 

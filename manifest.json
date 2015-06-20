@@ -29,8 +29,9 @@
             "js/webCommImgPopup.js",
             "js/sendImgComm.js",
             "js/showImgCommStatus.js",
-            "js/zlib.js",
-            "js/blockhash.js",
+            "js/png_jpeg_module.js",
+            "js/omggif_br.js",
+            "js/blockhash_br.js",
             "js/hash-module.js"
 
             ]

@@ -11,31 +11,31 @@ function toggleImgViewStatus (isEnable) {
 function persistWebCommImgStatusOnSuccess () {
 	hideImgCommStatus ();
 	
-	// delete _imgCommTooltips['webCommTooltips'];
-	_imgCommTooltips['webCommTooltips'] = [];
-	var status = _imgCommTooltips['webCommStatus'];
-	var store, text;
-	$('img').each(function() {
-		store = status[$(this).attr('src')];
+	// delete _imgCommData['webCommTooltips'];
+	_imgCommData['webCommTooltips'] = [];
+	var status = _imgCommData['webCommStatus'], store, text;
+		
+	$('img[' + _wcHashIdAttr + ']').each(function() {
+		store = status[$(this).attr(_wcHashIdAttr)];
 		if(store){
-			text = (store.length + 1) + getLocalString('tooltip_comments') ;
-			$(this).wrap("<div class='wrap-web-comm-img'></div>");
-			$(this).after("<span class='web-comm-img-status'>" + text + "</span>")
-
-			var tips = $(this).tooltipster({
-				content: $("<span><a href='show_comments'></a></span>").children().text(text),
-				// content: text,
-				autoClose: false,
-				multiple: true,
-				interactive: true,
-				trigger: 'custom',
-				position: 'bottom-left',
-				functionReady: onTooltipeReadyShowComm
-			});
-
-			// tips[0].show();
+			text = store['count'] + getLocalString('tooltip_comments') ;
 			
-			_imgCommTooltips['webCommTooltips'].push(tips[0]);
+			showWrappedStatus($(this), text);
+
+			// var tips = $(this).tooltipster({
+			// 	content: $("<span><a href='show_comments'></a></span>").children().text(text),
+			// 	// content: text,
+			// 	autoClose: false,
+			// 	multiple: true,
+			// 	interactive: true,
+			// 	trigger: 'custom',
+			// 	position: 'bottom-left',
+			// 	functionReady: onTooltipeReadyShowComm
+			// });
+
+			// // tips[0].show();
+			
+			// _imgCommData['webCommTooltips'].push(tips[0]);
 		}
 	});
 
@@ -45,19 +45,30 @@ function onTooltipeReadyShowComm (origin, tooltip) {
 	onTooltipeReady (origin, tooltip);
 }
 
-function hideImgCommStatus () {
-	var tips = _imgCommTooltips['webCommTooltips'];
-	for(i in tips) {
-		tips[i].hide();
-	}
+function showWrappedStatus (jqImg, text) {
+	jqImg.wrap("<div class='wrap-web-comm-img'></div>");
+	jqImg.after("<span class='web-comm-img-status'>" + text + "</span>");
 
+	clickShowPopupWebCommForm(jqImg, jqImg.next('span.web-comm-img-status'));
+}
+
+function hideWrappedStatus () {
 	$('div.wrap-web-comm-img img').each(function() {
 			$(this).unwrap().next().remove();
 	});
 }
 
+function hideImgCommStatus () {
+	var tips = _imgCommData['webCommTooltips'];
+	for(i in tips) {
+		tips[i].hide();
+	}
+
+	hideWrappedStatus ();
+}
+
 function showImgCommStatus () {
-	var tips = _imgCommTooltips['webCommTooltips'];
+	var tips = _imgCommData['webCommTooltips'];
 	for(i in tips) {
 		tips[i].show();
 	}
@@ -65,7 +76,7 @@ function showImgCommStatus () {
 
 function serveWebCommImgStatus () {
 	// console.log(_imgHashIdList);
-	$.get(_serverURL + 'getAllImgStatus', {data: {imgHashIdList: _imgHashIdList}} , onSuccessImageStatus).fail(onFailImageStatus);
+	$.get(_serverURL + 'getAllImgStatus', {imgHashIdList: _imgHashIdList} , onSuccessImageStatus).fail(onFailImageStatus);
 }
 
 function onSuccessImageStatus (data, status, jqXHR) {
@@ -79,13 +90,17 @@ function onSuccessImageStatus (data, status, jqXHR) {
 function onFailImageStatus (data, status, jqXHR) {
 	console.log("Fail occured while updating status!");
 	console.log(status);
+	updateImgCommStatus ([]);
 }
 
 function updateImgCommStatus (data) {
-	delete _imgCommTooltips['webCommStatus'];
-	var status = _imgCommTooltips['webCommStatus'] = {};
+	delete _imgCommData['webCommStatus'];
+	_imgCommData['webCommStatus'] = {};
+	console.log(data);
 	$.map(data, function(obj, i) {
 		obj = JSON.parse(obj);
-		status[obj.imgSrc] ? status[obj.imgSrc].push(obj) : status[obj.imgSrc] = [];
+		_imgCommData['webCommStatus'][obj.hashId] = obj;
+			// ? _imgCommData['webCommStatus'][obj.hashId].push(obj)
+			// 	: _imgCommData['webCommStatus'][obj.hashId] = [];
 	});
 }
