@@ -3,21 +3,17 @@
 // chrome.tabs.executeScript({file: 'js/imageselector.js'});
 
 var _tabIdsPersistence = [];
-var _tabId;
 
 chrome.browserAction.onClicked.addListener(function(tab) {
-	_tabId = tab.id;
-	saveOrRemoveTabId (tab.id);
-	triggerExtension (tab.id);
+		saveOrRemoveTabId (tab.id);
+		triggerExtension (tab.id);
 });
 
 chrome.tabs.onActivated.addListener(function(activeInfo) {
-	_tabId = activeInfo.tabId;
 	triggerExtension (activeInfo.tabId);
 });
 
 chrome.tabs.onUpdated.addListener(function(tabId){
-	_tabId = tabId;
 	triggerExtension (tabId);
 });
 
@@ -35,6 +31,7 @@ chrome.runtime.onSuspend.addListener(function (){
 
 function triggerExtension (tabId) {
 	var path;
+
 	if(isExtensionActive (tabId)){
 		path = 'images/iconActive.png';
 		sendMessageToContentScripts(tabId, true);
@@ -42,7 +39,6 @@ function triggerExtension (tabId) {
 		path = 'images/iconInactive.png';
 		sendMessageToContentScripts(tabId, false);
 	}
-
 	chrome.browserAction.setIcon({path: path});
 
 }
@@ -64,11 +60,11 @@ function sendMessageToContentScripts (tabId, isEnable) {
 }
 
 function isExtensionActive (tabId) {
-	return _tabIdsPersistence.indexOf(tabId) == -1 ? false : true;
+	return _tabIdsPersistence.indexOf(tabId) != -1;
 }
 
 function saveOrRemoveTabId (tabId) {
 	var index = _tabIdsPersistence.indexOf(tabId);
-	index == -1 ? _tabIdsPersistence.push(tabId) : delete _tabIdsPersistence[index];
+	 index == -1 ? _tabIdsPersistence.push(tabId) : delete _tabIdsPersistence[index];
 }
 

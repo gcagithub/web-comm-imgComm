@@ -1,54 +1,73 @@
-var delta;
-var imgCount;
-var count = 0;
+/*
+	Hash image module.
 
-function activateImgHashProcess () {
-	console.log('Start block hash!');
-	delta = new Date().getTime();
+	imports:
+		applicationActivity(true)
 
-	var imgList = $('img:not([' + _wcHashIdAttr + '])');
-	imgCount = imgList.size();
-	if (imgCount == 0) applicationActivity(true);
+	exports:
+		startHashProcess()
+		getHashIdList()
 
-	console.log("imgCount = " + imgCount);
-	
-	imgList.each(function() {
-		blockhashjs.blockhash($(this).attr('src'), 16, 1, blockHashResult.bind(this, $(this)));
-	});
+*/
 
-	// $('img').mouseover(function() {
-	// 	blockhashjs.blockhash($(this).attr('src'), 16, 1, blockHashResult.bind(this, $(this)));
-	// });
+var MODULE = (function(scope) {
+	var	delta,
+			imgCount,
+			counter = 0,
+			imgHashIdList = [];
 
-}
+	scope.startHashProcess = function () {
+		console.log('Start block hash!');
+		delta = new Date().getTime();
 
-function blockHashResult (jqImg, error, result, imgData) {
-	// console.log('End block hash! Time delta:' + (new Date().getTime() - delta));
-	// console.log(result);
-	imgCount --;
-	if (error) {
-		console.log('Hash block error! Imgsrc: ' + jqImg.attr('src'));
-		console.log(error);
-	} else if (imgData.width > 63 || imgData.height > 63) {
-		count ++;
-		jqImg.attr(_wcHashIdAttr, result);
-		fillHashIdList(result);
-	} else {
-		console.log('w x h = ' + imgData.width + ' x ' + imgData.height);
+		var imgList = $('img:not([' + scope.getTagNameImgHashId() + '])');
+		imgCount = imgList.size();	
+
+		if (imgCount == 0) startMainApplication ();
+
+		console.log("imgCount = " + imgCount);
+
+		imgList.each(function() {
+			blockhashjs.blockhash($(this).attr('src'), 16, 1, blockHashResult.bind(this, $(this)));
+		});
+
 	}
-	// delta = new Date().getTime();
 
-	if (imgCount == 0) {
-		console.log('End block hash! Time delta:' + (new Date().getTime() - delta) + '. Img counted = ' + count);
-		applicationActivity(true);	// webCommImgPopup.js
+	scope.getHashIdList = function () {
+		return imgHashIdList;
 	}
-}
 
-function fillHashIdList (hashId) {
-	if(!_imgHashIdList) _imgHashIdList = [];
+	function blockHashResult (jqImg, error, result, imgData) {
+		imgCount --;
+		if (error) {
+			console.log('Hash block error! Imgsrc: ' + jqImg.attr('src'));
+			console.log(error);
+		} else if (imgData.width > 63 || imgData.height > 63) {
+			counter ++;
+			jqImg.attr(scope.getTagNameImgHashId(), result);
+			setHashId(result);
+		} else {
+			console.log('w x h = ' + imgData.width + ' x ' + imgData.height);
+		}
+		// delta = new Date().getTime();
 
-	_imgHashIdList.push(hashId);
-}
+		if (imgCount == 0) {
+			console.log('End block hash! Time delta:' + (new Date().getTime() - delta) + '. Img counted = ' + counter);
+			startMainApplication ();	// webCommImgPopup.js
+		}
+	}
+
+	function startMainApplication () {
+		scope.applicationActivity(true);
+	}
+
+	function setHashId (hashId) {
+		imgHashIdList.push(hashId);
+	}
+
+	return scope;
+
+}(MODULE || {}));
 
 // function imgRawConverter (imgSrc) {
 // 	var xhr = new XMLHttpRequest();

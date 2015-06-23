@@ -1,5 +1,104 @@
-﻿// variables.js
+﻿/*
+	Image comment status module.
 
+	exports:
+		toggleImgStatus(true|false)
+		requestImgStatus()
+
+	imports:
+		getHashIdList()
+		getServerURL()
+		getTagNameImgHashId()
+		clickShowPopupWebCommForm(jqObj, jqTarget)
+*/
+
+var MODULE = (function(scope) {
+
+	var imgCommData = {};
+
+	this.requestImgStatus = function () {
+	// console.log(_imgHashIdList);
+		$.get(scope.getServerURL() + 'status',
+			{imgHashIdList: getHashIdList()},
+			onSuccessImageStatus).
+			fail(onFailImageStatus);
+	}
+
+	scope.toggleImgStatus = function(isEnable) {
+		console.log('toggleImgStatus ' + isEnable);
+		isEnable ? this.requestImgStatus() : hideWrappedStatus();
+	}
+
+	scope.hideImgStatus = function () {
+		hideWrappedStatus();
+	}
+
+	scope.requestImgStatus = this.requestImgStatus;
+
+	function getHashIdList () {
+		return scope.getHashIdList();
+	}
+
+	function onFailImageStatus (data, status, jqXHR) {
+		console.log("Fail occured while updating status!");
+		console.log(status);
+		updateImgStatus ([]);
+	}
+
+	function onSuccessImageStatus (data, status, jqXHR) {
+		console.log('Status has been updated successfull!');
+		var results = JSON.parse(jqXHR.responseText);
+		updateImgStatus (results.result);
+		showImgStatus();
+	}
+
+	function updateImgStatus (data) {
+		console.log(data);
+		$.map(data, function(obj, i) {
+			obj = JSON.parse(obj);
+			imgCommData[obj.hashId] = obj;
+		});
+	}
+
+	function showImgStatus () {
+		console.log('showImgStatus');
+		hideWrappedStatus ();
+		var	store;
+		$('img[' + getTagNameImgHashId() + ']').each(function() {
+			store = imgCommData[$(this).attr(getTagNameImgHashId())];
+			if(store){
+				text = store['count'] + scope.getLocalizeString('tooltip_comments') ;
+				showWrappedStatus($(this), text);
+			}
+		});
+	}
+
+
+	function showWrappedStatus (jqImg, text) {
+		jqImg.wrap("<div class='wrap-web-comm-img'></div>");
+		jqImg.after("<span class='web-comm-img-status'>" + text + "</span>");
+
+		getClickPopupForm(jqImg, jqImg.next('span.web-comm-img-status'));
+	}
+
+	function hideWrappedStatus () {
+		$('div.wrap-web-comm-img img').each(function() {
+				$(this).unwrap().next().remove();
+		});
+	}
+
+	function getClickPopupForm (jqObj, jqTarget) {
+		return scope.clickShowPopupWebCommForm(jqObj, jqTarget);
+	}
+
+	function getTagNameImgHashId () {
+		return scope.getTagNameImgHashId();
+	}
+
+	return scope;
+}(MODULE || {}));
+
+/*
 function toggleImgViewStatus (isEnable) {
 	if (isEnable) {
 		serveWebCommImgStatus();
@@ -76,7 +175,7 @@ function showImgCommStatus () {
 
 function serveWebCommImgStatus () {
 	// console.log(_imgHashIdList);
-	$.get(_serverURL + 'getAllImgStatus', {imgHashIdList: _imgHashIdList} , onSuccessImageStatus).fail(onFailImageStatus);
+	$.get(_serverURL + 'status', {imgHashIdList: _imgHashIdList} , onSuccessImageStatus).fail(onFailImageStatus);
 }
 
 function onSuccessImageStatus (data, status, jqXHR) {
@@ -104,3 +203,4 @@ function updateImgCommStatus (data) {
 			// 	: _imgCommData['webCommStatus'][obj.hashId] = [];
 	});
 }
+*/

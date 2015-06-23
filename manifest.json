@@ -25,15 +25,14 @@
             "js/jsrender.js",
             "js/jquery.tooltipster.min.js",
             "js/jquery-ui.min.js",
-            "js/variables.js",
-            "js/webCommImgPopup.js",
-            "js/sendImgComm.js",
-            "js/showImgCommStatus.js",
             "js/png_jpeg_module.js",
             "js/omggif_br.js",
             "js/blockhash_br.js",
-            "js/hash-module.js"
-
+            "js/variables.js",
+            "js/webCommImgPopup.js",
+            "js/hash-module.js",
+            "js/showImgCommStatus.js",
+            "js/sendImgComm.js"
             ]
     }
   ],
