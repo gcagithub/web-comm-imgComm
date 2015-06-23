@@ -28,11 +28,13 @@
             "js/png_jpeg_module.js",
             "js/omggif_br.js",
             "js/blockhash_br.js",
-            "js/variables.js",
-            "js/webCommImgPopup.js",
+            "js/config-module.js",
+            "js/popup-module.js",
+            "js/tooltipster-module.js",
             "js/hash-module.js",
-            "js/showImgCommStatus.js",
-            "js/sendImgComm.js"
+            "js/status-module.js",
+            "js/service-module.js",
+            "js/main.js"
             ]
     }
   ],

@@ -1,6 +1,3 @@
-// chrome.tabs.insertCSS({file: 'css/style.css'});
-// chrome.tabs.executeScript({file: 'js/jquery-2.1.1.min.js'});
-// chrome.tabs.executeScript({file: 'js/imageselector.js'});
 
 var _tabIdsPersistence = [];
 
