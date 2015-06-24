@@ -80,7 +80,6 @@ var MODULE = (function(scope) {
 
 	}
 
-
 	function removeJQPopupWebCommLayer () {
 		jqWebCommImgPopup = null;
 	}

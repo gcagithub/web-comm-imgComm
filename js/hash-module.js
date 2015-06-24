@@ -45,7 +45,7 @@ var MODULE = (function(scope) {
 		} else if (imgData.width > 63 || imgData.height > 63) {
 			counter ++;
 			jqImg.attr(scope.getTagNameImgHashId(), result);
-			setHashId(result);
+			saveHashId(result);
 		} else {
 			console.log('w x h = ' + imgData.width + ' x ' + imgData.height);
 		}
@@ -53,7 +53,7 @@ var MODULE = (function(scope) {
 
 		if (imgCount == 0) {
 			console.log('End block hash! Time delta:' + (new Date().getTime() - delta) + '. Img counted = ' + counter);
-			startMainApplication ();	// webCommImgPopup.js
+			startMainApplication ();
 		}
 	}
 
@@ -61,8 +61,10 @@ var MODULE = (function(scope) {
 		scope.applicationActivity(true);
 	}
 
-	function setHashId (hashId) {
-		imgHashIdList.push(hashId);
+	function saveHashId (hashId) {
+		var index = imgHashIdList.indexOf(hashId);
+		if (index == -1)
+			imgHashIdList.push(hashId);
 	}
 
 	return scope;

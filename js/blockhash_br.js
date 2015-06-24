@@ -222,6 +222,18 @@ var blockhashData = function(imgData, bits, method) {
     return hash;
 };
 
+var gifChecker = function (buf) {
+    var p = 0;
+
+  // - Header (GIF87a or GIF89a).
+  if (buf[p++] !== 0x47 ||            buf[p++] !== 0x49 || buf[p++] !== 0x46 ||
+      buf[p++] !== 0x38 || (buf[p++]+1 & 0xfd) !== 0x38 || buf[p++] !== 0x61) {
+    // throw "Invalid GIF 87a/89a header.";
+    return false;
+  }
+  return true;
+}
+
 var blockhash = function(src, bits, method, callback) {
     var xhr;
     xhr = new XMLHttpRequest();
@@ -250,20 +262,6 @@ var blockhash = function(src, bits, method, callback) {
                 imgData = jpeg.decode(data);
             }
             else if (contentType === 'image/gif') {
-                console.log('image/gif');
-                // var gifDecoder = new Gift(data);
-                // gifDecoder.parse();
-                // console.log(gifDecoder);
-                
-                // if(gifDecoder.signature === 'GIF'){
-                //     imgData = {
-                //         width: gifDecoder.width,
-                //         height: gifDecoder.height,
-                //         data: gifDecoder.frames[0].data
-                //     };
-                // }
-
-                
                 try {
                     omggif.GifReader(data);
                     pixels = [];

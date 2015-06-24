@@ -15,12 +15,31 @@
 var MODULE = (function(scope) {
 
 	var imgCommData = {};
+	var limitHashIdList = 20;
+	var segmentedHashIdList;
+	
+	this.requestImgStatusInOneTime = function () {
+		if(getHashIdList().length > limitHashIdList) {
+				var tempHashIdList = getHashIdList();
+				while (tempHashIdList.length > 0) {
+					queryImgStatus (tempHashIdList.splice(0, limitHashIdList))
+				}
+		} else {
+			queryImgStatus(getHashIdList());
+		}
+	}
 
 	this.requestImgStatus = function () {
-		$.get(scope.getServerURL() + 'status',
-			{imgHashIdList: getHashIdList()},
-			onSuccessImageStatus).
-			fail(onFailImageStatus);
+		if(getHashIdList().length > limitHashIdList) {
+
+			if (!segmentedHashIdList)
+				segmentedHashIdList = Object.create(getHashIdList());
+
+			queryImgStatus (segmentedHashIdList.splice(0, limitHashIdList))
+
+		} else {
+			queryImgStatus(getHashIdList());
+		}
 	}
 
 	scope.toggleImgStatus = function(isEnable) {
@@ -33,6 +52,13 @@ var MODULE = (function(scope) {
 
 	scope.requestImgStatus = this.requestImgStatus;
 
+	function queryImgStatus (hashIdList) {
+		$.get(scope.getServerURL() + 'status',
+			{imgHashIdList: hashIdList},
+			onSuccessImageStatus).
+			fail(onFailImageStatus);
+	}
+
 	function getHashIdList () {
 		return scope.getHashIdList();
 	}
@@ -41,6 +67,9 @@ var MODULE = (function(scope) {
 		console.log("Fail occured while updating status!");
 		console.log(status);
 		updateImgStatus ([]);
+
+		if (segmentedHashIdList) segmentedHashIdList = null;
+	
 	}
 
 	function onSuccessImageStatus (data, status, jqXHR) {
@@ -48,6 +77,14 @@ var MODULE = (function(scope) {
 		var results = JSON.parse(jqXHR.responseText);
 		updateImgStatus (results.result);
 		showImgStatus();
+
+		if (segmentedHashIdList	&& segmentedHashIdList.length != 0) {
+			console.log(segmentedHashIdList);
+			requestImgStatus();
+		} else if (segmentedHashIdList) {
+			segmentedHashIdList = null;
+		}
+
 	}
 
 	function updateImgStatus (data) {
@@ -200,3 +237,4 @@ function updateImgCommStatus (data) {
 			// 	: _imgCommData['webCommStatus'][obj.hashId] = [];
 	});
 }
+*/
