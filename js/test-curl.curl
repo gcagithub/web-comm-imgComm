@@ -1,0 +1,7 @@
+curl -XPOST  -d '{"username" : "Alex", "email":"alex@test.ru", "password":"123"}' \
+-H 'Content-type: */*' -H 'Connection: keep-alive' \
+http://localhost:8080/WebComm/api/v0.1/rest/auth/signup -D -
+
+--cookie 'JSESSIONID=ljnjnlkjn'
+
+MySQLIntegrityConstraintViolationException

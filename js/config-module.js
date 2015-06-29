@@ -10,7 +10,7 @@
 */
 
 var MODULE = (function(scope) {
-	var		serverURL = "http://localhost:8080/WebComm/api/ver0.1/rest/imgcomment/",
+	var		serverURL = "http://localhost:8080/WebComm/api/v0.1/rest/imgcomment/",
 				popupFormFileName = "popupImgCommForm.html",
 				tagNameImgHashId = 'web-comm-hashId',
 				popupFormWidth = 600,

@@ -52,7 +52,7 @@ function sendMessageToContentScripts (tabId, isEnable) {
 	if (!tabId) return;
 
 	chrome.tabs.sendMessage(tabId, {selectImg: isEnable}, function(response) {
-	    console.log(response.farewell);
+	    console.log(response);
 	});
 }
 

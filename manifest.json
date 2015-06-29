@@ -1,6 +1,6 @@
 {
-  "name": "Web-comm image selector.",
-  "description": "Selects image and sends comment to server",
+  "name": "Web-comm image.",
+  "description": "Selects image and views/posts comments",
   "version": "0.1",
   "permissions": [
     "activeTab",
@@ -21,10 +21,11 @@
               "css/tooltipster.css",
               "css/tooltipster-noir.css"],
 
-      "js": ["js/jquery-2.1.1.min.js",
+      "js": [
+            "js/jquery-2.1.1.min.js",
+            "js/jquery-ui.min.js",
             "js/jsrender.js",
             "js/jquery.tooltipster.min.js",
-            "js/jquery-ui.min.js",
             "js/png_jpeg_module.js",
             "js/omggif_br.js",
             "js/blockhash_br.js",

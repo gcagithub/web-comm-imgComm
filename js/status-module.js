@@ -75,11 +75,11 @@ var MODULE = (function(scope) {
 	function onSuccessImageStatus (data, status, jqXHR) {
 		console.log('Status has been updated successfull!');
 		var results = JSON.parse(jqXHR.responseText);
+		console.log(data);
 		updateImgStatus (results.result);
 		showImgStatus();
 
 		if (segmentedHashIdList	&& segmentedHashIdList.length != 0) {
-			console.log(segmentedHashIdList);
 			requestImgStatus();
 		} else if (segmentedHashIdList) {
 			segmentedHashIdList = null;
@@ -88,7 +88,7 @@ var MODULE = (function(scope) {
 	}
 
 	function updateImgStatus (data) {
-		// console.log(data);
+		console.log(data);
 		$.map(data, function(obj, i) {
 			obj = JSON.parse(obj);
 			imgCommData[obj.hashId] = obj;
